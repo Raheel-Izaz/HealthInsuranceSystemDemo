@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Policy>
+
+<div class="container mt-4">
+    <h2>Insurance Policies</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Policy Number</th>
+                <th>Company</th>
+                <th>Total Premium</th>
+                <th>Installment Count</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var policy in Model)
+            {
+                <tr>
+                    <td>@policy.PolicyNumber</td>
+                    <td>@policy.Company.Name</td>
+                    <td>@policy.TotalPremium</td>
+                    <td>@policy.InstallmentCount</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@policy.Id" class="btn btn-info btn-sm">Details</a>
+                        <a asp-action="Edit" asp-route-id="@policy.Id" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@policy.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+           

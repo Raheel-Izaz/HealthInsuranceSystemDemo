@@ -1,0 +1,42 @@
+﻿@model Policy
+
+<div class="container mt-4">
+    <h2>Issue New Insurance Policy Contract</h2>
+
+    <form asp-action="Create" method="post" class="col-md-6 mt-3">
+
+        <div class="mb-3">
+            <label class="form-label">Select Client Company</label>
+            <select asp-for="CompanyId" class="form-control" required>
+                <option value="">-- Choose a Company --</option>
+                @foreach (var company in ViewBag.CompanyList)
+                {
+                    <option value="@company.Id">@company.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Policy Number</label>
+            <input asp-for="PolicyNumber" class="form-control" placeholder="e.g., POL-2026-XYZ" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Total Premium (PKR)</label>
+            <input asp-for="TotalPremium" type="number" step="0.01" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Select Billing Frequency Plan</label>
+            <select asp-for="InstallmentPlanId" class="form-control" required>
+                <option value="">-- Choose Approved Payment Frequency --</option>
+                @foreach (var plan in ViewBag.PlanList)
+                {
+                    <option value="@plan.Id">@plan.Name (@plan.Count Payments)</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Activate Policy & Generate Bills</button>
+    </form>
+</div>

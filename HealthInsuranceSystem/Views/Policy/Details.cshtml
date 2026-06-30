@@ -1,0 +1,92 @@
+﻿@model Policy
+
+@{
+    ViewData["Title"] = "Policy Billing Ledger";
+}
+
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-with-item"><a asp-controller="Company" asp-action="Index" class="text-decoration-none">Company Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Policy Ledger</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-sm border mb-4">
+        <div class="card-body p-4">
+            <span class="badge bg-success-subtle text-success mb-2 px-3 py-2 rounded-pill border fw-bold">CONTRACT ACTIVE</span>
+            <h2 class="fw-bold text-dark mb-1">Policy Ledger: @Model.PolicyNumber</h2>
+            <p class="text-muted mb-4">Relational Contract Mapping Profile</p>
+
+            <div class="row g-3">
+                <div class="col-sm-6 col-md-3 border-end">
+                    <small class="text-muted d-block text-uppercase fw-bold">Corporate Client</small>
+                    <span class="fw-bold text-dark text-uppercase">@Model.Company?.Name</span>
+                </div>
+                <div class="col-sm-6 col-md-3 border-end">
+                    <small class="text-muted d-block text-uppercase fw-bold">Total Premium</small>
+                    <span class="fw-bold text-primary">@Model.TotalPremium.ToString("N2") PKR</span>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <small class="text-muted d-block text-uppercase fw-bold">Billing Split</small>
+                    <span class="fw-bold text-secondary">@Model.InstallmentCount Months Payment Plan</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm border">
+        <div class="card-header bg-white py-3 border-bottom-0">
+            <h5 class="mb-0 fw-bold text-secondary">Automated Installment Payment Schedule</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Schedule ID</th>
+                        <th scope="col">Billing Iteration</th>
+                        <th scope="col">Due Date Target</th>
+                        <th scope="col">Amount Due</th>
+                        <th scope="col">Collection Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Installments == null || !Model.Installments.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">No installments generated for this policy.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        int iteration = 1;
+                        foreach (var inst in Model.Installments.OrderBy(i => i.DueDate))
+                        {
+                            <tr>
+                                <td class="text-muted small">#@inst.Id</td>
+                                <td class="fw-bold text-dark">Month @iteration</td>
+                                <td>@inst.DueDate.ToString("dd-MMM-yyyy")</td>
+                                <td class="fw-bold">@inst.Amount.ToString("N2") PKR</td>
+                                <td>
+                                    @if (inst.IsPaid)
+                                    {
+                                        <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm">
+                                            <i class="bi bi-check-circle-fill me-1"></i> Paid & Settled
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill border border-warning-subtle">
+                                            <i class="bi bi-clock-history me-1"></i> Pending Collection
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                            iteration++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+﻿@model IEnumerable<InstallmentPlan>
+
+@{
+    ViewData["Title"] = "Global Configuration - Billing Plans";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
+        <div>
+            <h1 class="h2 text-dark mb-1">Global System Settings</h1>
+            <p class="text-muted mb-0">Metadata Configuration Management • Role: Super Admin / Financial Director</p>
+        </div>
+        <div>
+            <a asp-controller="Company" asp-action="Index" class="btn btn-outline-secondary px-3 shadow-sm">
+                <i class="bi bi-arrow-left"></i> Return to Main Dashboard
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 shadow-sm mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["Error"]
+        </div>
+    }
+
+    <div class="row g-4">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm border p-4">
+                <h5 class="fw-bold text-dark mb-3">Define New Installment Structure</h5>
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Plan Visibility Name</label>
+                        <input name="Name" type="text" class="form-control" placeholder="e.g., Bi-Monthly, Custom 6-Month" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Installment Split Count</label>
+                        <input name="Count" type="number" min="1" max="24" class="form-control" placeholder="e.g., 6" required />
+                        <small class="text-muted">How many individual bills will automatically generate for this contract choice.</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="IsActive" value="true" checked id="activeCheck">
+                            <label class="form-check-label fw-bold text-secondary" for="activeCheck">Enable Globally Instantly</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm">
+                        <i class="bi bi-plus-circle-fill me-2"></i> Deploy Billing Plan
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm border">
+                <div class="card-header bg-white py-3 border-bottom-0">
+                    <h5 class="mb-0 fw-bold text-secondary">Active Financial Matrix Configurations</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Plan ID</th>
+                                <th>Configuration Key</th>
+                                <th>Billing Iterations</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var plan in Model)
+                            {
+                                <tr>
+                                    <td class="text-muted">#@plan.Id</td>
+                                    <td class="fw-bold text-dark">@plan.Name</td>
+                                    <td>
+                                        <span class="badge bg-primary px-3 py-2 rounded-pill font-monospace">@plan.Count Splits</span>
+                                    </td>
+                                    <td>
+                                        @if (plan.IsActive)
+                                        {
+                                            <span class="badge bg-success-subtle text-success px-2 py-1 rounded">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded">Disabled</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
