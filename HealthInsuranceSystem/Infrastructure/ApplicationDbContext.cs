@@ -11,6 +11,8 @@ namespace HealthInsuranceSystem.Infrastructure
         public DbSet<Policy> Policies { get; set; }
         public DbSet<Installment> Installments { get; set; }
         public DbSet<InstallmentPlan> InstallmentPlans { get; set; }
+        public DbSet<Receipt> Receipts { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

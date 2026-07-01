@@ -84,9 +84,20 @@
                                     }
                                     else
                                     {
-                                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill border border-warning-subtle">
-                                            <i class="bi bi-clock-history me-1"></i> Pending Collection
-                                        </span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill border border-warning-subtle">
+                                                <i class="bi bi-clock-history me-1"></i> Pending
+                                            </span>
+
+                                            <form asp-action="CollectPayment" method="post" class="d-inline m-0">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="installmentId" value="@inst.Id" />
+                                                <input type="hidden" name="policyId" value="@Model.Id" />
+                                                <button type="submit" class="btn btn-sm btn-success fw-bold px-2 py-1 rounded shadow-sm" style="font-size: 0.75rem;">
+                                                    Collect Cash
+                                                </button>
+                                            </form>
+                                        </div>
                                     }
                                 </td>
                             </tr>
