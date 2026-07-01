@@ -67,5 +67,33 @@ namespace HealthInsuranceSystem.Controllers
 
             return RedirectToAction("Index", "Company");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            // Fetch the policy along with its child installments collection
+            var policy = await _context.Policies
+                .Include(p => p.Installments)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (policy == null)
+            {
+                TempData["Error"] = "The requested policy contract could not be found.";
+                return RedirectToAction("Index", "Company");
+            }
+
+            // Atomic Operation: Remove the child installments first, then the parent contract
+            if (policy.Installments != null && policy.Installments.Any())
+            {
+                _context.Installments.RemoveRange(policy.Installments);
+            }
+
+            _context.Policies.Remove(policy);
+            await _context.SaveChangesAsync(); // Transaction commits everything safely at once
+
+            TempData["Success"] = $"Policy '{policy.PolicyNumber}' and all related automated installments have been purged safely.";
+            return RedirectToAction("Index", "Company");
+        }
     }
 }
