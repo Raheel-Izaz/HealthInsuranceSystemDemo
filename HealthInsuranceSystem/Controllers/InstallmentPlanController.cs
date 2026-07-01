@@ -14,8 +14,6 @@ namespace HealthInsuranceSystem.Controllers
             _context = context;
         }
 
-        // 1. GET: /InstallmentPlan/Index
-        // Displays the plan setup screen (List of current configurations + Creation Form)
         [HttpGet]
         public async Task<IActionResult> Index()
         {
